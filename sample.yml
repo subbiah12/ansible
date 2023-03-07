@@ -9,6 +9,7 @@
    tasks:
     - name: create a user
       user:
-       name: '{{students}}'
+       name: '{{item}}'
        state: present
+      loop: '{{students}}'
       
