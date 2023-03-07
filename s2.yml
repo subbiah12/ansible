@@ -1,0 +1,28 @@
+---
+ - name: demo on bra
+   hosts: linux
+   tasks:
+    
+    - block:
+     
+       - name: install the sw1
+         yum:
+           name: trees
+           state: present
+         tags: software_change 
+      rescue:
+
+       - name: install the sw2
+         yum:
+          name: stress
+          state: present
+
+      always:
+
+       - name: start the service
+         service: 
+          name: httpd
+          state: started
+
+
+

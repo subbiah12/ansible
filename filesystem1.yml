@@ -1,0 +1,39 @@
+---
+ - name: playbook for simple 1 GB partition
+   hosts:  linux
+   become: true
+   tasks:
+    - name: mount the lv on /data1    
+      mount:
+       path: /data1
+       src: /dev/sample-vg/sample-lv
+       fstype: xfs
+       state: absent
+
+
+   
+  
+        
+
+    - name: Install lvm2 dependency
+      package:
+        name: lvm2
+        state: present
+
+    - name: task for creating logical volume
+      lvol:
+       vg: sample-vg
+       lv:  sample-lv
+       state: absent
+       force: yes
+   
+    
+    - name: task for creating volume group
+      lvg:
+        vg: sample-vg
+        pvs: /dev/xvdf1
+:        state: absent
+
+   
+          
+     

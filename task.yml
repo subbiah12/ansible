@@ -1,0 +1,25 @@
+---
+ - name: demo on bra
+   hosts: linux
+   tasks:
+    
+     
+       - name: install the sw1
+         yum:
+           name: httpd
+           state: absent
+         tags: software_change 
+
+       - name: install the sw2
+         yum:
+          name: bind
+          state: absent
+
+
+       - name: start the service
+         service: 
+          name: httpd
+          state: started
+
+
+

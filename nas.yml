@@ -1,0 +1,54 @@
+---
+ 
+ - name: implement the nfs server
+   hosts: linux
+   vars_files: ../var/nfs.yml
+   tasks:
+    
+    - name: install the nfs software
+      yum:
+       name: nfs-utils
+       state: present
+    
+    - name: start the service     
+      service:
+       name: nfs-server
+       state: started
+       enabled: yes
+   
+    - name: create the directory  
+      file:
+       path: '{{path_name}}'
+       state: directory
+       mode: '{{permission}}'
+
+    - name: make configration
+      lineinfile:
+       path: /etc/exports
+       line: '{{path_name}} {{client_ip}} {perm}'
+       state: present
+      notify: update the share
+
+   handlers:
+
+    - name: update the share     
+      shell:
+       cmd: exportfs -rv
+
+
+ - name: mount the nfs
+   hosts: linux
+   tasks:
+    - name: install the nfs
+      yum:
+       name: nfs-utils
+       state: present
+    - name: mount
+      mount:
+       src:  172.31.46.96:/share7
+       path: /mnt
+       fstype: nfs
+       state: absent
+   
+    
+

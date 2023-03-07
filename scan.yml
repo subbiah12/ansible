@@ -1,0 +1,20 @@
+---
+
+ - name: list out currnet PV
+   hosts: all
+   tasks:
+    - name: pvs
+      shell: pvs --noheadings -o pv_name
+      register: pvs_list
+      
+    - debug: var=pvs_list.stdout
+
+    - name: create partition on the given disk name
+      shell: /bin/echo -e "n\np\n1\n\n\nt\n8e\nw" | fdisk -l  ## Create the partition on a disk.
+      register: partitioning 
+    - name: test failure condition
+      fail:
+       msg: " you are trying to add the same disk which is already there "
+      when: fdisk -l  in pvs_list.stdout
+
+

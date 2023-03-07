@@ -1,0 +1,35 @@
+---
+ 
+ - name: implement the nfs server
+   hosts: 172.31.44.175
+   tasks:
+    
+    - name: install the nfs software
+      dnf:
+       name: nfs-server
+       state: present
+    
+    - name: start the service     
+      service:
+       name: nfs-server
+       state: started
+       enabled: yes
+   
+    - name: create the directory  
+      file:
+       path: /share1
+       state: directory
+       mode: 0777  
+
+    - name: make configration
+      lineinfile:
+       path: /etc/exports
+       line: '/share1  172.31.45.148/32(rw)'
+
+
+
+
+
+   
+    
+

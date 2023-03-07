@@ -1,0 +1,13 @@
+---
+ - name: create a user
+   hosts: linux
+   tasks:
+    - name: create a  user in amazaonlinux
+      user:
+         name: '{{item}}'
+         state: present
+      loop:
+       - spider
+       - mike
+         
+   

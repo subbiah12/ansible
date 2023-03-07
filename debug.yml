@@ -1,0 +1,12 @@
+---
+ - name: debug the filesystem output
+   hosts: linux
+   tasks:
+    - name: filsystem_output
+      shell:
+        cmd: df -hT
+      register: block_list
+    
+    - name: capture the output
+      debug:
+        var: block_list

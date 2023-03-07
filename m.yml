@@ -1,0 +1,17 @@
+---
+- hosts: linux
+  user: ansible
+  become: True
+  gather_facts: no
+  tasks:
+    - name: Ensure pwgen is installed
+      yum :
+         name: pwgen
+         state: present
+         update_cache: True
+    - name: Generate password
+      shell: pwgen -N 1 -s 30
+      register: mypass
+    - name: Print the generated password
+      debug:
+       msg: this is '{{mypass}}'

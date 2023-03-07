@@ -1,0 +1,23 @@
+---
+- hosts: linux
+  become: yes
+  tasks:
+    - name: Create new users
+      user:
+        name: '{{ item.name }}'
+        uid: '{{ item.uid}}'
+        comment: '{{item.comment}}'
+        state: present
+
+      loop:
+       - name: john
+         uid: 1024 
+         comment: l4
+       - name: mike
+         uid: 1025
+         comment: l4
+        
+       - name: andrew
+         uid: 1026
+         comment: l4
+         

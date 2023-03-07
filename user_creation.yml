@@ -1,0 +1,11 @@
+---
+ - name: create a user
+   hosts: linux
+   vars:  
+     user: mani1
+     st: present 
+   tasks:
+    - name:  create '{{user}}'
+      user:
+       name: '{{user}}'
+       state: '{{st}}'

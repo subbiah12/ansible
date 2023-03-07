@@ -1,0 +1,24 @@
+---
+ - name :  configure a ssh 
+   hosts: linux
+   ignore_errors: yes
+   tasks:
+    - name: config a ssh file
+      blockinfile:
+        path: /etc/ssh/sshd_config
+        block: |
+          MaxAuthTries 6
+          Banner /etc/motd
+          X11Forwarding no
+      notify: restart ssh
+   
+   handlers:
+    - name: restart ssh
+      service:
+        name: sshd
+        state: restarted
+ 
+ 
+ 
+ 
+    

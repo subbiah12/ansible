@@ -1,0 +1,14 @@
+---
+ - name: install the software
+   hosts: linux
+   tasks: 
+    - name: install the linux software
+      yum:
+        name: '{{item}}'
+        state: present
+      loop:
+       - vsftpd 
+       - mod_ssl   
+      
+         
+

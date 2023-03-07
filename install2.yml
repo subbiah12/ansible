@@ -1,0 +1,25 @@
+---
+  
+- name: install for software
+  hosts: linux
+  tasks:
+  vars_files: ../var/install.yml
+   
+   - name: httpd
+     yum:
+       name: '{{web_pkg}}'
+       state: '{{st}}'
+   - name:  
+     service:
+       name:  '{{web_service}}'
+       state: '{{started}}'
+       enabled: yes
+   - name: Create index.html using Jinja2
+     template:
+      src: index.j2
+      dest: /var/www/html/index.html    
+
+...  
+        
+    
+

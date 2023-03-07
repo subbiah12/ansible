@@ -1,0 +1,13 @@
+---
+ - name: install the software
+   hosts: linux
+   tasks:
+    - name: read task.yml and do
+      include: task1.yml
+    
+      loop:
+       - mod_ssl
+       
+      
+         
+

@@ -1,0 +1,6 @@
+---
+ - name: this is a demo role
+   hosts: linux
+   roles:
+     
+    - /home/ansible/project/roles/geerlingguy.docker 

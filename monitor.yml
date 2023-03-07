@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+  - name: Ansible register variable example
+    shell: "uptime"
+    register: check_uptime
+
+  - debug:
+      var: check_uptime.stdout

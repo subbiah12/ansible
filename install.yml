@@ -1,0 +1,23 @@
+---
+  
+- name: install for software
+  hosts: linux
+  tasks: 
+   - name: httpd
+     yum:
+       name: '{{web_pkg}}'
+       state: '{{st}}'
+   - name:  
+     service:
+       name:  '{{web_service}}'
+       state: '{{status}}'
+       enabled: yes
+   - name:       
+     shell:
+       cmd: echo 'This is webpage' > /var/www/html/index.html
+        
+
+...  
+        
+    
+

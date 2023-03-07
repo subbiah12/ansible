@@ -1,0 +1,14 @@
+---
+ - name: playbook for incrase data1
+   hosts:  linux
+   become: true
+   tasks:
+
+         
+    - name: extend logical volume
+      lvol:
+       vg: sample-vg
+       lv: sample-lv
+       size:  100%PVS
+       resizefs: true
+       force: yes 

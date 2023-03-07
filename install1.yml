@@ -1,0 +1,10 @@
+---
+
+- name: install for software
+  hosts: linux
+  tasks:
+   - name: httpd
+     yum:
+       name: '{{web_pkg}}'
+       state: '{{st}}'
+

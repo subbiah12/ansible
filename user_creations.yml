@@ -1,0 +1,19 @@
+---
+ - name: create  a user
+   hosts: linux
+   tasks:
+    - name: create a user in linux
+      user:
+        name: '{{ item.name }}'
+        uid:  '{{ item.uid }}'
+        comment:  '{{ item.comment }}' 
+        state: present
+
+      loop:
+        - name: mike
+          uid: 1001
+          comment: Administrator
+
+        - name: sandra
+          uid: 1002
+          comment: Techie
