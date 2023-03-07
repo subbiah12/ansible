@@ -1,0 +1,9 @@
+[ansible@ip-172-31-44-175 playbooks]$ cat lab7.yml
+---
+ - name: Lab 7 Solution
+   hosts: all
+   tasks:
+    - name: Edit /etc/motd using Jinja2
+      template:
+        src: motd.j2
+        dest: /etc/mot
