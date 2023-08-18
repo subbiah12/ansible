@@ -1,0 +1,41 @@
+---
+- name: Configure LVM on new disks
+  hosts: your_redhat_server
+  become: yes
+
+  tasks:
+    - name: Discover new disks
+      command: "lsblk -o NAME,TYPE,MOUNTPOINT | grep disk | awk '$3 == \"\" {print $1}'"
+      register: new_disks
+      changed_when: false
+
+    - name: Create physical volumes (PVs) on new disks
+      command: "pvcreate /dev/{{ item }}"
+      with_items: "{{ new_disks.stdout_lines }}"
+      when: new_disks.stdout_lines | length > 0
+
+    - name: Create volume group (VG) using new PVs
+      command: "vgcreate vg_new_disks /dev/{{ new_disks.stdout }}"
+      when: new_disks.stdout_lines | length > 0
+
+    - name: Create logical volume (LV) using all available space in VG
+      command: "lvcreate -n lv_new_disk -l 100%FREE vg_new_disks"
+      when: new_disks.stdout_lines | length > 0
+
+    - name: Format LV with ext4 filesystem
+      filesystem: fstype=ext4 dev=/dev/vg_new_disks/lv_new_disk
+
+    - name: Add entry to /etc/fstab for the new LV
+      lineinfile:
+        path: /etc/fstab
+        line: "/dev/vg_new_disks/lv_new_disk /mnt/new_disk ext4 defaults 0 0"
+      notify: Mount new LV
+
+  handlers:
+    - name: Mount new LV
+      command: "mount -a"
+
+    - name: Restart services to recognize new LV (e.g., systemd-udev)
+      systemd:
+        name: systemd-udev
+        state: restarted
