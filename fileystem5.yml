@@ -1,0 +1,41 @@
+---
+- name: Detect and Manage New Disk with LVM
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Detect new disk
+      shell: lsblk -o NAME | grep '^xvd' | tail -1
+      register: new_disk_name
+      changed_when: false
+
+
+
+    - name: Create physical volume
+      command: pvcreate /dev/{{ new_disk_name.stdout }}
+
+    - name: Create volume group
+      command: vgcreate new_vg /dev/{{ new_disk_name.stdout }}
+
+    - name: Create logical volume
+      command: lvcreate -l 100%FREE -n new_lv new_vg
+
+    - name: Format the logical volume
+      command: mkfs.ext4 /dev/new_vg/new_lv
+
+    - name: Create mount directory
+      file:
+        path: /mnt/new_disk
+        state: directory
+
+    - name: Mount the logical volume
+      mount:
+        path: /mnt/new_disk
+        src: /dev/new_vg/new_lv
+        fstype: ext4
+        state: mounted
+
+    - name: Add entry to fstab
+      lineinfile:
+        path: /etc/fstab
+        line: '/dev/new_vg/new_lv /mnt/new_disk ext4 defaults 0 0'
